@@ -9,3 +9,21 @@ body {
     font-family: $main-font;
     color: $white-font;
 }
+
+.links {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 34px;
+    margin-top: 86px;
+    color: #616475;
+
+    &__item {
+        color: #616475;
+        text-decoration: none;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+}

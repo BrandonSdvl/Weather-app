@@ -4,8 +4,13 @@
       <CardDay v-for="(item, key) in weatherDays" :key="key" :day="item" />
     </section>
     <Highlights :dayDetails="dayDetails" />
-    <a href="http://github.com/brandonsdvl">BrandonSdvl</a> @
-    <a href="http://devchallenges.io">DevChallenges.io</a>
+    <div class="links">
+      <a href="http://github.com/brandonsdvl" class="links__item"
+        >BrandonSdvl</a
+      >
+      @
+      <a href="http://devchallenges.io" class="links__item">DevChallenges.io</a>
+    </div>
   </div>
 </template>
 
