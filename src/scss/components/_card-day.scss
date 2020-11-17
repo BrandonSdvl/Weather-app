@@ -1,3 +1,44 @@
+.days-container {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 45% 45%;
+    grid-gap: 26px;
+    padding: 50px;
+    justify-content: center;
+    align-items: center;
+}
+
 .card-day {
-    background-color: black;
+    background-color: $card-background;
+    height: 177px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 18px;
+    padding-top: 18px;
+
+    &__date {
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 19px;
+        text-align: center;
+    }
+
+    &__image {
+        max-height: 62px;
+    }
+
+    &__state {
+        width: 65%;
+        display: flex;
+        justify-content: space-between;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 19px;
+    }
+
+    &__min {
+        color: #A09FB1;
+    }
 }

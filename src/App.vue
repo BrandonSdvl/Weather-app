@@ -60,8 +60,8 @@ export default {
 
           for (let i = 1; i <= 5; i++) {
             let day = {
-              minTemp: res.body.consolidated_weather[i].max_temp,
-              maxTemp: res.body.consolidated_weather[i].min_temp,
+              minTemp: Math.round(res.body.consolidated_weather[i].max_temp),
+              maxTemp: Math.round(res.body.consolidated_weather[i].min_temp),
               weatherState: res.body.consolidated_weather[i].weather_state_name,
               day:
                 i == 1

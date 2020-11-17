@@ -32,7 +32,6 @@
 <script>
 export default {
   name: "Basic",
-  // props: ["currentDay"],
   props: {
     currentDay: {
       type: Object,

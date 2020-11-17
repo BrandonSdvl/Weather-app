@@ -1,7 +1,9 @@
 <template>
-  <section class="days-container">
-    <CardDay v-for="(item, key) in weatherDays" :key="key" :day="item" />
-  </section>
+  <div class="details">
+    <section class="days-container">
+      <CardDay v-for="(item, key) in weatherDays" :key="key" :day="item" />
+    </section>
+  </div>
 </template>
 
 <script>

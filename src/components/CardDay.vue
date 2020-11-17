@@ -1,10 +1,10 @@
 <template>
   <article class="card-day">
-    <span class="card-day__date"></span>
-    <img alt="" class="card-day__image" />
+    <span class="card-day__date" v-text="day.day"></span>
+    <img :src="day.imageStatus" alt="" class="card-day__image" />
     <div class="card-day__state">
-      <span class="card-day__max"></span>
-      <span class="card-day__min"></span>
+      <span class="card-day__max" v-text="day.maxTemp + '°C'"></span>
+      <span class="card-day__min" v-text="day.minTemp + '°C'"></span>
     </div>
   </article>
 </template>
