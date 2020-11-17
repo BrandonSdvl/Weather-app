@@ -1,20 +1,115 @@
 <template>
   <div id="app">
-    <Basic/>
-    <Details/>
+    <Basic :currentDay="currentDay" />
+    <Details :weatherDays="weatherDays" />
   </div>
 </template>
 
 <script>
-import Basic from './components/Basic.vue'
-import Details from './components/Details.vue'
+import Basic from "./components/Basic.vue";
+import Details from "./components/Details.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    Basic
-  }
-}
+    Basic,
+    Details,
+  },
+  data() {
+    return {
+      currentDay: {
+        cityName: "",
+        maxTemp: 0,
+        minTemp: 0,
+        currentTemp: 0,
+        weatherState: "",
+        imageStatus: "",
+        currentDate: "",
+      },
+      weatherDays: [],
+    };
+  },
+  methods: {
+    getImgUrl(pic) {
+      return require(`./assets/${pic.replace(/ /g, "")}.png`);
+    },
+    fetch() {
+      const city = 116545;
+      const api = `https://www.metaweather.com/api/location/${city}`;
+      const cors = "https://cors-anywhere.herokuapp.com";
+      const url = `${cors}/${api}`;
+
+      this.$http
+        .get(url)
+        .then((res) => {
+          console.log(res);
+          this.currentDay.cityName = res.body.title;
+          this.currentDay.maxTemp = res.body.consolidated_weather[0].max_temp;
+          this.currentDay.minTemp = res.body.consolidated_weather[0].min_temp;
+          this.currentDay.currentTemp = Math.round(
+            res.body.consolidated_weather[0].the_temp
+          );
+          this.currentDay.weatherState =
+            res.body.consolidated_weather[0].weather_state_name;
+          this.currentDay.currentDate = this.getDate(
+            res.body.consolidated_weather[0].applicable_date
+          );
+          this.currentDay.imageStatus = this.getImgUrl(
+            this.currentDay.weatherState
+          );
+
+          for (let i = 1; i <= 5; i++) {
+            let day = {
+              minTemp: res.body.consolidated_weather[i].max_temp,
+              maxTemp: res.body.consolidated_weather[i].min_temp,
+              weatherState: res.body.consolidated_weather[i].weather_state_name,
+              day:
+                i == 1
+                  ? "Tomorrow"
+                  : this.getDate(
+                      res.body.consolidated_weather[i].applicable_date
+                    ),
+              imageStatus: "",
+            };
+
+            (day.imageStatus = this.getImgUrl(day.weatherState)),
+              this.weatherDays.push(day);
+            console.log(this.weatherDays);
+          }
+        })
+
+        .catch((err) => console.log(err));
+    },
+    getDate(dateApi) {
+      const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      const months = [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
+      const dateapi = dateApi.split("-");
+      let date = new Date(
+        `${dateapi[1]} ${dateapi[2]}, ${dateapi[0]} 12:00:00`
+      );
+      let weekday = date.getDay();
+      let month = date.getMonth();
+
+      return `${days[weekday]}, ${dateapi[2]} ${months[month]}`;
+    },
+  },
+  created() {
+    this.fetch();
+  },
+};
 </script>
 
 <style lang="scss" src="./scss/styles.scss"></style>
