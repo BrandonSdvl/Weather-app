@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Basic :currentDay="currentDay" />
-    <Details :weatherDays="weatherDays" />
+    <Details :weatherDays="weatherDays" :dayDetails="dayDetails" />
   </div>
 </template>
 
@@ -27,6 +27,13 @@ export default {
         currentDate: "",
       },
       weatherDays: [],
+      dayDetails: {
+        windStatus: "",
+        windDirection: "",
+        humidity: 0,
+        visivility: "",
+        airPressure: 0,
+      },
     };
   },
   methods: {
@@ -74,8 +81,19 @@ export default {
 
             (day.imageStatus = this.getImgUrl(day.weatherState)),
               this.weatherDays.push(day);
-            console.log(this.weatherDays);
           }
+
+          this.dayDetails.windStatus = Math.round(
+            res.body.consolidated_weather[0].wind_speed
+          );
+          this.dayDetails.windDirection =
+            res.body.consolidated_weather[0].wind_direction_compass;
+          this.dayDetails.humidity = res.body.consolidated_weather[0].humidity;
+          this.dayDetails.visibility = res.body.consolidated_weather[0].visibility.toFixed(
+            1
+          );
+          this.dayDetails.airPressure =
+            res.body.consolidated_weather[0].air_pressure;
         })
 
         .catch((err) => console.log(err));
