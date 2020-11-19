@@ -10,7 +10,14 @@
         <span class="highlight-card__unit">mph</span>
       </div>
       <div class="highlight-card__direction-container">
-        <i class="fas fa-location-arrow highlight-card__icon"></i>
+        <i
+          class="fas fa-location-arrow highlight-card__icon"
+          v-bind:style="{
+            transform: `rotate(${
+              this.dayDetails.windDirectionDegrees - 45
+            }deg)`,
+          }"
+        ></i>
         <span class="highlight-card__direction">{{
           dayDetails.windDirection
         }}</span>
@@ -31,6 +38,10 @@
           <span>100</span>
         </div>
         <div class="humidity__bar"></div>
+        <div
+          class="humidity__percentage-bar"
+          v-bind:style="{ width: dayDetails.humidity + '%' }"
+        ></div>
         <span class="humidity__unit">%</span>
       </div>
     </article>

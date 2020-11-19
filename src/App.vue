@@ -30,8 +30,9 @@ export default {
       dayDetails: {
         windStatus: "",
         windDirection: "",
+        windDirectionDegrees: 0,
         humidity: 0,
-        visivility: "",
+        visibility: "",
         airPressure: 0,
       },
     };
@@ -67,8 +68,8 @@ export default {
 
           for (let i = 1; i <= 5; i++) {
             let day = {
-              minTemp: Math.round(res.body.consolidated_weather[i].max_temp),
-              maxTemp: Math.round(res.body.consolidated_weather[i].min_temp),
+              minTemp: Math.round(res.body.consolidated_weather[i].min_temp),
+              maxTemp: Math.round(res.body.consolidated_weather[i].max_temp),
               weatherState: res.body.consolidated_weather[i].weather_state_name,
               day:
                 i == 1
@@ -94,6 +95,9 @@ export default {
           );
           this.dayDetails.airPressure =
             res.body.consolidated_weather[0].air_pressure;
+          this.dayDetails.windDirectionDegrees = Math.round(
+            res.body.consolidated_weather[0].wind_direction
+          );
         })
 
         .catch((err) => console.log(err));

@@ -65,15 +65,14 @@
         height: 8px;
         border-radius: 80px;
         background-color: $white-font;
+    }
 
-        &::after {
-            content: "";
-            display: block;
-            width: 50%;
-            background-color: #FFEC65;
-            height: inherit;
-            border-radius: inherit;
-        }
+    &__percentage-bar {
+        width: 50%;
+        height: 8px;
+        background-color: #FFEC65;
+        border-radius: 80px;
+        transform: translateY(-8px);
     }
 
     &__numbers {
