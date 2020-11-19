@@ -1,13 +1,14 @@
 <template>
   <div id="app">
-    <Basic :currentDay="currentDay" />
-    <Details :weatherDays="weatherDays" :dayDetails="dayDetails" />
+    <Basic />
+    <Details />
   </div>
 </template>
 
 <script>
 import Basic from "./components/Basic.vue";
 import Details from "./components/Details.vue";
+import { mapState } from "vuex";
 
 export default {
   name: "App",
@@ -15,38 +16,17 @@ export default {
     Basic,
     Details,
   },
+  computed: {
+    ...mapState(["currentDay", "weatherDays", "dayDetails"]),
+  },
   data() {
-    return {
-      currentDay: {
-        cityName: "",
-        maxTemp: 0,
-        minTemp: 0,
-        currentTemp: 0,
-        weatherState: "",
-        imageStatus: "",
-        currentDate: "",
-      },
-      weatherDays: [],
-      dayDetails: {
-        windStatus: "",
-        windDirection: "",
-        windDirectionDegrees: 0,
-        humidity: 0,
-        visibility: "",
-        airPressure: 0,
-      },
-    };
+    return {};
   },
   methods: {
     getImgUrl(pic) {
       return require(`./assets/${pic.replace(/ /g, "")}.png`);
     },
-    fetch() {
-      const city = 116545;
-      const api = `https://www.metaweather.com/api/location/${city}`;
-      const cors = "https://cors-anywhere.herokuapp.com";
-      const url = `${cors}/${api}`;
-
+    fetch(url) {
       this.$http
         .get(url)
         .then((res) => {
@@ -129,7 +109,11 @@ export default {
     },
   },
   created() {
-    this.fetch();
+    const city = 116545;
+    const api = `https://www.metaweather.com/api/location/${city}`;
+    const cors = "https://cors-anywhere.herokuapp.com";
+    const url = `${cors}/${api}`;
+    this.fetch(url);
   },
 };
 </script>

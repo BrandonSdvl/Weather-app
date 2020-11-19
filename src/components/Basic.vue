@@ -30,14 +30,12 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "Basic",
-  props: {
-    currentDay: {
-      type: Object,
-      default: {},
-      required: true,
-    },
+  computed: {
+    ...mapState(["currentDay"]),
   },
 };
 </script>

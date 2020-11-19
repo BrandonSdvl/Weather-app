@@ -66,14 +66,11 @@
   </section>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   name: "Highlights",
-  props: {
-    dayDetails: {
-      type: Object,
-      default: {},
-      required: true,
-    },
+  computed: {
+    ...mapState(["dayDetails"]),
   },
 };
 </script>

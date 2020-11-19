@@ -3,7 +3,7 @@
     <section class="days-container">
       <CardDay v-for="(item, key) in weatherDays" :key="key" :day="item" />
     </section>
-    <Highlights :dayDetails="dayDetails" />
+    <Highlights />
     <div class="links">
       <a href="http://github.com/brandonsdvl" class="links__item"
         >BrandonSdvl</a
@@ -18,23 +18,16 @@
 import CardDay from "./CardDay.vue";
 import Highlights from "./Highlights.vue";
 import Hightlights from "./Highlights.vue";
+import { mapState } from "vuex";
+
 export default {
   name: "Details",
   components: {
     CardDay,
     Highlights,
   },
-  props: {
-    weatherDays: {
-      type: Array,
-      default: [],
-      required: true,
-    },
-    dayDetails: {
-      type: Object,
-      default: {},
-      required: true,
-    },
+  computed: {
+    ...mapState(["weatherDays"]),
   },
 };
 </script>
