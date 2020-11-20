@@ -7,3 +7,31 @@
     align-items: center;
     justify-content: center;
 }
+
+.change-unit {
+    width: 100px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 42px;
+
+    &__item {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: none;
+        font-family: Raleway;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 18px;
+        line-height: 21px;
+        text-align: center;
+        color: $white-font;
+        background-color: #585676;
+        outline: none;
+
+        &--selected {
+            background-color: $white-font;
+            color: #110E3C;
+        }
+    }
+}

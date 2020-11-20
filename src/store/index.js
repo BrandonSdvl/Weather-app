@@ -23,6 +23,10 @@ export default new Vuex.Store({
       visibility: "",
       airPressure: 0,
     },
+    app: {
+      unitSelected: 'c',
+      prueba: 'hola'
+    },
   },
   mutations: {
   },

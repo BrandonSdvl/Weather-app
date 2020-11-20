@@ -1,5 +1,25 @@
 <template>
   <div class="details">
+    <div class="change-unit">
+      <button
+        class="change-unit__item change-unit__c"
+        :class="{
+          'change-unit__item--selected': app.unitSelected == 'c',
+        }"
+        @click="app.unitSelected = 'c'"
+      >
+        C°
+      </button>
+      <button
+        class="change-unit__item change-unit__f"
+        :class="{
+          'change-unit__item--selected': app.unitSelected == 'f',
+        }"
+        @click="app.unitSelected = 'f'"
+      >
+        F°
+      </button>
+    </div>
     <section class="days-container">
       <CardDay v-for="(item, key) in weatherDays" :key="key" :day="item" />
     </section>
@@ -27,7 +47,7 @@ export default {
     Highlights,
   },
   computed: {
-    ...mapState(["weatherDays"]),
+    ...mapState(["weatherDays", "app"]),
   },
 };
 </script>
