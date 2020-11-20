@@ -16,7 +16,7 @@
     </div>
     <h1 class="basic__degrees">
       <span v-text="currentDay.currentTemp"></span>
-      <span class="basic__unit">°C</span>
+      <span class="basic__unit" v-text="app.unitSelected"></span>
     </h1>
     <h2 class="basic__weather-status" v-text="currentDay.weatherState"></h2>
     <div class="basic__date">
@@ -35,7 +35,7 @@ import { mapState } from "vuex";
 export default {
   name: "Basic",
   computed: {
-    ...mapState(["currentDay"]),
+    ...mapState(["currentDay", "app"]),
   },
 };
 </script>

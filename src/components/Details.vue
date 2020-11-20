@@ -4,18 +4,28 @@
       <button
         class="change-unit__item change-unit__c"
         :class="{
-          'change-unit__item--selected': app.unitSelected == 'c',
+          'change-unit__item--selected': app.unitSelected == '°C',
         }"
-        @click="app.unitSelected = 'c'"
+        @click="
+          if (app.unitSelected != '°C') {
+            fToC();
+            app.unitSelected = '°C';
+          }
+        "
       >
         C°
       </button>
       <button
         class="change-unit__item change-unit__f"
         :class="{
-          'change-unit__item--selected': app.unitSelected == 'f',
+          'change-unit__item--selected': app.unitSelected == '°F',
         }"
-        @click="app.unitSelected = 'f'"
+        @click="
+          if (app.unitSelected != '°F') {
+            cToF();
+            app.unitSelected = '°F';
+          }
+        "
       >
         F°
       </button>
@@ -38,7 +48,7 @@
 import CardDay from "./CardDay.vue";
 import Highlights from "./Highlights.vue";
 import Hightlights from "./Highlights.vue";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "Details",
@@ -48,6 +58,9 @@ export default {
   },
   computed: {
     ...mapState(["weatherDays", "app"]),
+  },
+  methods: {
+    ...mapMutations(["cToF", "fToC"]),
   },
 };
 </script>
