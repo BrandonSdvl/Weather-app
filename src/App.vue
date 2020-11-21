@@ -10,7 +10,7 @@
 import Basic from "./components/Basic.vue";
 import Details from "./components/Details.vue";
 import Search from "./components/Search.vue";
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "App",
@@ -26,10 +26,14 @@ export default {
     return {};
   },
   methods: {
+    ...mapMutations(["cToF"]),
     getImgUrl(pic) {
       return require(`./assets/${pic.replace(/ /g, "")}.png`);
     },
-    fetch(url) {
+    fetch(city) {
+      const api = `https://www.metaweather.com/api/location/${city}`;
+      const cors = "https://cors-anywhere.herokuapp.com";
+      const url = `${cors}/${api}`;
       this.$http
         .get(url)
         .then((res) => {
@@ -49,6 +53,7 @@ export default {
             this.currentDay.weatherState
           );
 
+          this.$store.state.weatherDays = [];
           for (let i = 1; i <= 5; i++) {
             let day = {
               minTemp: Math.round(res.body.consolidated_weather[i].min_temp),
@@ -81,6 +86,10 @@ export default {
           this.dayDetails.windDirectionDegrees = Math.round(
             res.body.consolidated_weather[0].wind_direction
           );
+
+          if (this.app.unitSelected == "°F") {
+            this.cToF();
+          }
         })
 
         .catch((err) => console.log(err));
@@ -113,10 +122,7 @@ export default {
   },
   created() {
     const city = 116545;
-    const api = `https://www.metaweather.com/api/location/${city}`;
-    const cors = "https://cors-anywhere.herokuapp.com";
-    const url = `${cors}/${api}`;
-    this.fetch(url);
+    this.fetch(city);
   },
 };
 </script>

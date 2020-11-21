@@ -1,6 +1,6 @@
 <template>
   <div class="search">
-    <i class="fas fa-times search__close"></i>
+    <i class="fas fa-times search__close" v-on:click="hide()"></i>
     <form action="" class="search__form">
       <input
         type="text"
@@ -16,7 +16,15 @@
       />
     </form>
     <div class="search__results">
-      <div v-for="(city, index) in cities" :key="index" class="search__item">
+      <div
+        v-for="(city, index) in cities"
+        :key="index"
+        class="search__item"
+        v-on:click="
+          $parent.fetch(city.woeid);
+          hide();
+        "
+      >
         <span v-text="city.title" class="search__item-title"></span>
         <i class="fas fa-chevron-right search__arrow"></i>
       </div>
@@ -34,7 +42,7 @@ export default {
   },
   methods: {
     fetchSearch(query) {
-      if (this.inputText.length == 0) {
+      if (query.length == 0) {
         this.cities = [];
         return 0;
       }
@@ -61,6 +69,9 @@ export default {
           console.log(res);
         })
         .catch((err) => console.log(err));
+    },
+    hide() {
+      document.querySelector(".search").classList.remove("search--show");
     },
   },
   watch: {

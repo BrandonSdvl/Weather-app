@@ -13,7 +13,7 @@
           }
         "
       >
-        C°
+        °C
       </button>
       <button
         class="change-unit__item change-unit__f"
@@ -27,7 +27,7 @@
           }
         "
       >
-        F°
+        °F
       </button>
     </div>
     <section class="days-container">

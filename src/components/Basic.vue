@@ -1,9 +1,11 @@
 <template>
   <div class="basic">
     <div class="basic__button-container">
-      <button class="basic__search-place">Search for places</button>
+      <button class="basic__search-place" v-on:click="show()">
+        Search for places
+      </button>
       <button class="basic__get-location">
-        <i class="fas fa-compass logo"></i>
+        <!-- <i class="fas fa-compass logo"></i> -->
       </button>
     </div>
     <div class="basic__image-container">
@@ -36,6 +38,11 @@ export default {
   name: "Basic",
   computed: {
     ...mapState(["currentDay", "app"]),
+  },
+  methods: {
+    show() {
+      document.querySelector(".search").classList.add("search--show");
+    },
   },
 };
 </script>
