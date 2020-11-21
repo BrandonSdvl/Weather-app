@@ -25,13 +25,14 @@ export default new Vuex.Store({
     },
     app: {
       unitSelected: '°C',
+      res: {}
     },
   },
   mutations: {
     cToF(state) {
-      state.currentDay.currentTemp = (state.currentDay.currentTemp * 1.8) + 32
-      state.currentDay.maxTemp = (state.currentDay.maxTemp * 1.8) + 32
-      state.currentDay.minTemp = (state.currentDay.minTemp * 1.8) + 32
+      state.currentDay.currentTemp = Math.round((state.currentDay.currentTemp * 1.8) + 32)
+      state.currentDay.maxTemp = Math.round((state.currentDay.maxTemp * 1.8) + 32)
+      state.currentDay.minTemp = Math.round((state.currentDay.minTemp * 1.8) + 32)
 
       state.weatherDays.forEach(item => {
         item.minTemp = Math.round((item.minTemp * 1.8) + 32)
@@ -39,15 +40,23 @@ export default new Vuex.Store({
       })
     },
     fToC(state) {
-      state.currentDay.currentTemp = (state.currentDay.currentTemp - 32) * (5 / 9)
-      state.currentDay.maxTemp = (state.currentDay.maxTemp - 32) * (5 / 9)
-      state.currentDay.minTemp = (state.currentDay.minTemp - 32) * (5 / 9)
+      state.currentDay.currentTemp = Math.round((state.currentDay.currentTemp - 32) * (5 / 9))
+      state.currentDay.maxTemp = Math.round((state.currentDay.maxTemp - 32) * (5 / 9))
+      state.currentDay.minTemp = Math.round((state.currentDay.minTemp - 32) * (5 / 9))
 
       state.weatherDays.forEach(item => {
         item.minTemp = Math.round((item.minTemp - 32) * (5 / 9))
         item.maxTemp = Math.round((item.maxTemp - 32) * (5 / 9))
       })
-    }
+    },
+    fetch() {
+      axios
+        .get(
+          "https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/search/?query=san"
+        )
+        .then((res) => console.log(res))
+        .catch((err) => console.log(err));
+    },
   },
   actions: {
   },

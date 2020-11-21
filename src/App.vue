@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <Search />
     <Basic />
     <Details />
   </div>
@@ -8,6 +9,7 @@
 <script>
 import Basic from "./components/Basic.vue";
 import Details from "./components/Details.vue";
+import Search from "./components/Search.vue";
 import { mapState } from "vuex";
 
 export default {
@@ -15,9 +17,10 @@ export default {
   components: {
     Basic,
     Details,
+    Search,
   },
   computed: {
-    ...mapState(["currentDay", "weatherDays", "dayDetails"]),
+    ...mapState(["currentDay", "weatherDays", "dayDetails", "app"]),
   },
   data() {
     return {};
