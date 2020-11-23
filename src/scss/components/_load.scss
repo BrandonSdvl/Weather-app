@@ -1,0 +1,23 @@
+.load {
+    background-color: $primary-background;
+    margin: 0;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    position: absolute;
+
+    &__text {
+        display: block;
+        padding-left: 15px;
+        padding: 5px 0 5px 15px;
+        text-align: left;
+        font-size: 12px;
+        font-family: $main-font;
+        color: $white-font;
+    }
+
+    &--hide {
+        display: none;
+    }
+}

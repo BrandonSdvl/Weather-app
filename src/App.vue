@@ -1,5 +1,8 @@
 <template>
   <div id="app">
+    <div class="load">
+      <span class="load__text">Loading...</span>
+    </div>
     <Search />
     <Basic />
     <Details />
@@ -27,14 +30,21 @@ export default {
   },
   methods: {
     ...mapMutations(["cToF"]),
+    hideLoad() {
+      document.querySelector(".load").classList.add("load--hide");
+      document.body.style.overflow = "auto";
+    },
+    showLoad() {
+      document.querySelector(".load").classList.remove("load--hide");
+    },
     getImgUrl(pic) {
       return require(`./assets/${pic.replace(/ /g, "")}.png`);
     },
-    fetch(city) {
+    async fetch(city) {
       const api = `https://www.metaweather.com/api/location/${city}`;
       const cors = "https://cors-anywhere.herokuapp.com";
       const url = `${cors}/${api}`;
-      this.$http
+      await this.$http
         .get(url)
         .then((res) => {
           console.log(res);
@@ -90,6 +100,7 @@ export default {
           if (this.app.unitSelected == "°F") {
             this.cToF();
           }
+          this.hideLoad();
         })
 
         .catch((err) => console.log(err));

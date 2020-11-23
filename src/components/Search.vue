@@ -21,6 +21,7 @@
         :key="index"
         class="search__item"
         v-on:click="
+          $parent.showLoad();
           $parent.fetch(city.woeid);
           hide();
         "
@@ -46,6 +47,7 @@ export default {
         this.cities = [];
         return 0;
       }
+      this.$parent.showLoad();
       const cors = "https://cors-anywhere.herokuapp.com";
       const api = `https://www.metaweather.com/api/location/search/?query=${query}`;
       const url = `${cors}/${api}`;
@@ -67,6 +69,7 @@ export default {
             }
           }
           console.log(res);
+          this.$parent.hideLoad();
         })
         .catch((err) => console.log(err));
     },
