@@ -4,9 +4,7 @@
       <button class="basic__search-place" v-on:click="show()">
         Search for places
       </button>
-      <button class="basic__get-location">
-        <!-- <i class="fas fa-compass logo"></i> -->
-      </button>
+      <button class="basic__get-location" v-on:click="getLocation()"></button>
     </div>
     <div class="basic__image-container">
       <img
@@ -42,6 +40,35 @@ export default {
   methods: {
     show() {
       document.querySelector(".search").classList.add("search--show");
+    },
+    getLocation() {
+      const geoLocation = navigator.geolocation;
+      geoLocation.getCurrentPosition(this.fetchLocation, error, options);
+
+      const options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+      };
+
+      const error = (error) => console.log(error);
+    },
+    fetchLocation(position) {
+      if (this.app.woeidLocation != 0) {
+        this.$parent.fetch(this.app.woeidLocation);
+        return;
+      } else {
+        const cors = "https://cors-anywhere.herokuapp.com";
+        const api = `https://www.metaweather.com/api/location/search/?lattlong=${position.coords.latitude},${position.coords.longitude}`;
+        const url = `${cors}/${api}`;
+        this.$http
+          .get(url)
+          .then((res) => {
+            this.app.woeidLocation = res.body[0].woeid;
+            this.$parent.fetch(this.app.woeidLocation);
+          })
+          .catch((err) => console.log(err));
+      }
     },
   },
 };

@@ -25,7 +25,8 @@ export default new Vuex.Store({
     },
     app: {
       unitSelected: '°C',
-      res: {}
+      res: {},
+      woeidLocation: 0,
     },
   },
   mutations: {
