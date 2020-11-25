@@ -1,10 +1,14 @@
 <template>
-  <div class="basic">
+  <div class="basic aside">
     <div class="basic__button-container">
-      <button class="basic__search-place" v-on:click="show()">
+      <button class="basic__search-place button" v-on:click="show()">
         Search for places
       </button>
-      <button class="basic__get-location" v-on:click="getLocation()"></button>
+      <button
+        class="basic__get-location button"
+        v-on:click="getLocation()"
+        aria-label="GetLocation"
+      ></button>
     </div>
     <div class="basic__image-container">
       <img

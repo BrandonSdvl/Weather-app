@@ -2,7 +2,7 @@
   <div class="details">
     <div class="change-unit">
       <button
-        class="change-unit__item change-unit__c"
+        class="change-unit__item change-unit__c button"
         :class="{
           'change-unit__item--selected': app.unitSelected == '°C',
         }"
@@ -16,7 +16,7 @@
         °C
       </button>
       <button
-        class="change-unit__item change-unit__f"
+        class="change-unit__item change-unit__f button"
         :class="{
           'change-unit__item--selected': app.unitSelected == '°F',
         }"
@@ -35,11 +35,16 @@
     </section>
     <Highlights />
     <div class="links">
-      <a href="http://github.com/brandonsdvl" class="links__item"
+      <a
+        href="http://github.com/brandonsdvl"
+        class="links__item"
+        target="_blank"
         >BrandonSdvl</a
       >
       @
-      <a href="http://devchallenges.io" class="links__item">DevChallenges.io</a>
+      <a href="http://devchallenges.io" class="links__item" target="_blank"
+        >DevChallenges.io</a
+      >
     </div>
   </div>
 </template>

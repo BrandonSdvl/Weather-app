@@ -6,6 +6,12 @@
     padding: 50px;
     justify-content: center;
     align-items: center;
+
+    @include laptop {
+        padding: 0;
+        margin-top: 66px;
+        grid-template-columns: repeat(5, 18%);
+    }
 }
 
 .card-day {

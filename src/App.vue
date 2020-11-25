@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="app">
     <div class="load">
       <span class="load__text">Loading...</span>
     </div>

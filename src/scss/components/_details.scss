@@ -6,6 +6,15 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
+    @include tablet {
+        padding: 0 100px;
+    }
+
+    @include laptop {
+        padding: 0 123px;
+        min-height: 100%;
+    }
 }
 
 .change-unit {
@@ -33,5 +42,14 @@
             background-color: $white-font;
             color: #110E3C;
         }
+
+        @include laptop {
+            margin-left: 12px;
+        }
+    }
+
+    @include laptop {
+        width: 100%;
+        justify-content: flex-end;
     }
 }

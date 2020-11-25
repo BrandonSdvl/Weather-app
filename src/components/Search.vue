@@ -1,5 +1,5 @@
 <template>
-  <div class="search">
+  <div class="search aside">
     <i class="fas fa-times search__close" v-on:click="hide()"></i>
     <form action="" class="search__form">
       <input

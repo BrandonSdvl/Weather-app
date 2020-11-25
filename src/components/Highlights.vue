@@ -1,6 +1,6 @@
 <template>
   <section class="highlights-container">
-    <h2>Today's Hightlight</h2>
+    <h2 class="highlights-container__title">Today's Hightlight</h2>
     <article class="highlight-card highlight-card__wind-status">
       <span class="highlight-card__title">Wind Status</span>
       <div class="highlight-card__description-container">
