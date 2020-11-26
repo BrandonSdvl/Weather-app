@@ -58,7 +58,7 @@ export default {
       const error = (error) => console.log(error);
     },
     fetchLocation(position) {
-      $parent.showLoad();
+      this.$parent.showLoad();
       if (this.app.woeidLocation != 0) {
         this.$parent.fetch(this.app.woeidLocation);
         return;
@@ -71,7 +71,7 @@ export default {
           .then((res) => {
             this.app.woeidLocation = res.body[0].woeid;
             this.$parent.fetch(this.app.woeidLocation);
-            $parent.hideLoad();
+            this.$parent.hideLoad();
           })
           .catch((err) => console.log(err));
       }
