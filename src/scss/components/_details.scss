@@ -43,7 +43,12 @@
             color: #110E3C;
         }
 
+
         @include laptop {
+            &:hover {
+                background-color: lighten(#585676, 20%);
+            }
+
             margin-left: 12px;
         }
     }
