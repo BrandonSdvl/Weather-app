@@ -1,6 +1,6 @@
 <template>
   <div class="search aside">
-    <i class="fas fa-times search__close" v-on:click="hide()"></i>
+    <i class="fas fa-times search__close button" v-on:click="hide()"></i>
     <form action="" class="search__form">
       <input
         type="text"
@@ -11,7 +11,7 @@
       <input
         type="submit"
         value="Search"
-        class="search__button"
+        class="search__button button"
         v-on:click.prevent="fetchSearch(inputText)"
       />
     </form>
