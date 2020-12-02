@@ -4,7 +4,7 @@
       <span class="load__text">Loading...</span>
     </div>
     <Search />
-    <Basic />
+    <Basic ref="basic" />
     <Details />
   </div>
 </template>
@@ -133,7 +133,13 @@ export default {
   },
   created() {
     const city = 116545;
+    // if (navigator.geolocation) {
+    // navigator.geolocation.getCurrentPosition(showPosition);
+    // }
     this.fetch(city);
+  },
+  mounted() {
+    this.$refs.basic.getLocation();
   },
 };
 </script>
