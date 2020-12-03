@@ -25,8 +25,9 @@ export default new Vuex.Store({
     },
     app: {
       unitSelected: '°C',
-      res: {},
       woeidLocation: 0,
+      cors: "https://cors-anywhere.herokuapp.com",
+      api: "https://www.metaweather.com/api/location",
     },
   },
   mutations: {
@@ -49,14 +50,6 @@ export default new Vuex.Store({
         item.minTemp = Math.round((item.minTemp - 32) * (5 / 9))
         item.maxTemp = Math.round((item.maxTemp - 32) * (5 / 9))
       })
-    },
-    fetch() {
-      axios
-        .get(
-          "https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/search/?query=san"
-        )
-        .then((res) => console.log(res))
-        .catch((err) => console.log(err));
     },
   },
   actions: {

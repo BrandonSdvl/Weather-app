@@ -4,7 +4,6 @@
     height: max-content;
     background-color: $second-background;
     padding-top: 17px;
-    display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
@@ -16,7 +15,7 @@
     left: -100%;
     transition: left .3s ease-in-out;
 
-    @include laptop {
+    @include tablet {
         height: max-content;
         width: 450px;
     }
@@ -51,7 +50,7 @@
         height: 100%;
         background: none;
         border: 1px solid $white-font;
-        font-family: Raleway;
+        font-family: $main-font;
         font-size: 16px;
         color: $gray-font;
         padding: 17px;
@@ -68,13 +67,13 @@
         height: 100%;
         background-color: #3C47E9;
         border: none;
-        font-family: Raleway;
+        font-family: $main-font;
         font-weight: 600;
         font-size: 16px;
         line-height: 18, 78px;
         color: $white-font;
 
-        @include laptop {
+        @include tablet {
             &:hover {
                 background-color: transparent;
                 border: 2px solid #3C47E9;

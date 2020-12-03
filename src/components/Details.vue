@@ -3,6 +3,7 @@
     <div class="change-unit">
       <button
         class="change-unit__item change-unit__c button"
+        title="Celsius"
         :class="{
           'change-unit__item--selected': app.unitSelected == '°C',
         }"
@@ -17,6 +18,7 @@
       </button>
       <button
         class="change-unit__item change-unit__f button"
+        title="Fahrenheit"
         :class="{
           'change-unit__item--selected': app.unitSelected == '°F',
         }"

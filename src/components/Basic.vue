@@ -1,20 +1,24 @@
 <template>
   <div class="basic aside">
     <div class="basic__button-container">
-      <button class="basic__search-place button" v-on:click="show()">
+      <button
+        class="basic__search-place button"
+        v-on:click="show()"
+        aria-label="Search"
+      >
         Search for places
       </button>
       <button
         class="basic__get-location button"
         v-on:click="getLocation()"
         aria-label="GetLocation"
+        title="Location"
       ></button>
     </div>
     <div class="basic__image-container">
       <img
         :src="currentDay.imageStatus"
         alt="weatherState"
-        srcset=""
         class="basic__image"
       />
     </div>
@@ -25,7 +29,7 @@
     <h2 class="basic__weather-status" v-text="currentDay.weatherState"></h2>
     <div class="basic__date">
       Today<span class="separator">•</span
-      ><span class="" v-text="currentDay.currentDate"></span>
+      ><span v-text="currentDay.currentDate"></span>
     </div>
     <div class="basic__location-content">
       <i class="fas fa-map-marker-alt location-logo"></i>
@@ -63,9 +67,8 @@ export default {
         this.$parent.fetch(this.app.woeidLocation);
         return;
       } else {
-        const cors = "https://cors-anywhere.herokuapp.com";
-        const api = `https://www.metaweather.com/api/location/search/?lattlong=${position.coords.latitude},${position.coords.longitude}`;
-        const url = `${cors}/${api}`;
+        const apiArg = `search/?lattlong=${position.coords.latitude},${position.coords.longitude}`;
+        const url = `${this.app.cors}/${this.app.api}/${apiArg}`;
         this.$http
           .get(url)
           .then((res) => {

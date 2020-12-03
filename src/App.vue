@@ -25,9 +25,6 @@ export default {
   computed: {
     ...mapState(["currentDay", "weatherDays", "dayDetails", "app"]),
   },
-  data() {
-    return {};
-  },
   methods: {
     ...mapMutations(["cToF"]),
     hideLoad() {
@@ -40,14 +37,12 @@ export default {
     getImgUrl(pic) {
       return require(`./assets/${pic.replace(/ /g, "")}.png`);
     },
-    async fetch(city) {
-      const api = `https://www.metaweather.com/api/location/${city}`;
-      const cors = "https://cors-anywhere.herokuapp.com";
-      const url = `${cors}/${api}`;
-      await this.$http
+    fetch(city) {
+      const apiArg = `location/${city}`;
+      const url = `${this.app.cors}/${this.app.api}/${apiArg}`;
+      this.$http
         .get(url)
         .then((res) => {
-          console.log(res);
           this.currentDay.cityName = res.body.title;
           this.currentDay.maxTemp = res.body.consolidated_weather[0].max_temp;
           this.currentDay.minTemp = res.body.consolidated_weather[0].min_temp;
@@ -133,9 +128,6 @@ export default {
   },
   created() {
     const city = 116545;
-    // if (navigator.geolocation) {
-    // navigator.geolocation.getCurrentPosition(showPosition);
-    // }
     this.fetch(city);
   },
   mounted() {

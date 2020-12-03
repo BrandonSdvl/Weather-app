@@ -7,7 +7,7 @@
     justify-content: center;
     align-items: center;
 
-    @include laptop {
+    @include tablet {
         padding: 0;
         margin-top: 66px;
         grid-template-columns: repeat(5, 18%);

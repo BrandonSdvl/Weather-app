@@ -5,7 +5,7 @@
     flex-direction: column;
     justify-content: center;
 
-    @include laptop {
+    @include tablet {
         display: grid;
         grid-template-columns: 50% 50%;
         grid-gap: 48px;
@@ -40,6 +40,14 @@
         font-weight: 700;
         font-size: 64px;
         line-height: 75px;
+
+        @include tablet {
+            font-size: 54px;
+        }
+
+        @include laptop {
+            font-size: 64px;
+        }
     }
 
     &__unit {
@@ -47,6 +55,14 @@
         font-size: 36px;
         line-height: 42px;
         font-style: normal;
+
+        @include tablet {
+            font-size: 30px;
+        }
+
+        @include laptop {
+            font-size: 36px;
+        }
     }
 
     &__direction-container {
@@ -64,11 +80,10 @@
         margin-right: 10px;
     }
 
-    @include laptop {
+    @include tablet {
         width: 100%;
         margin: 0;
     }
-
 }
 
 .humidity {

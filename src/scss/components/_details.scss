@@ -8,12 +8,12 @@
     justify-content: center;
 
     @include tablet {
-        padding: 0 100px;
+        padding: 0 50px;
+        min-height: 100%;
     }
 
     @include laptop {
         padding: 0 123px;
-        min-height: 100%;
     }
 }
 
@@ -28,7 +28,7 @@
         height: 40px;
         border-radius: 50%;
         border: none;
-        font-family: Raleway;
+        font-family: $main-font;
         font-style: normal;
         font-weight: 700;
         font-size: 18px;
@@ -43,8 +43,7 @@
             color: #110E3C;
         }
 
-
-        @include laptop {
+        @include tablet {
             &:hover {
                 background-color: lighten(#585676, 20%);
             }
@@ -53,7 +52,7 @@
         }
     }
 
-    @include laptop {
+    @include tablet {
         width: 100%;
         justify-content: flex-end;
     }

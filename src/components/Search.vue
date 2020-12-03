@@ -1,7 +1,7 @@
 <template>
   <div class="search aside">
     <i class="fas fa-times search__close button" v-on:click="hide()"></i>
-    <form action="" class="search__form">
+    <form class="search__form">
       <input
         type="text"
         v-model="inputText"
@@ -33,6 +33,7 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   data() {
     return {
@@ -41,6 +42,9 @@ export default {
       cities: [],
     };
   },
+  computed: {
+    ...mapState(["app"]),
+  },
   methods: {
     fetchSearch(query) {
       if (query.length == 0) {
@@ -48,9 +52,8 @@ export default {
         return 0;
       }
       this.$parent.showLoad();
-      const cors = "https://cors-anywhere.herokuapp.com";
-      const api = `https://www.metaweather.com/api/location/search/?query=${query}`;
-      const url = `${cors}/${api}`;
+      const apiArg = `location/search/?query=${query}`;
+      const url = `${this.app.cors}/${this.app.api}/${apiArg}`;
       this.$http
         .get(url)
         .then((res) => {
@@ -68,7 +71,6 @@ export default {
               this.cities.push(city);
             }
           }
-          console.log(res);
           this.$parent.hideLoad();
         })
         .catch((err) => console.log(err));
