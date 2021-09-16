@@ -26,7 +26,7 @@ export default new Vuex.Store({
     app: {
       unitSelected: '°C',
       woeidLocation: 0,
-      cors: "https://cors-anywhere.herokuapp.com",
+      cors: "https://cors-proxy-b.herokuapp.com",
       api: "https://www.metaweather.com/api/location",
     },
   },
