@@ -1,10 +1,7 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { defineStore } from "pinia";
 
-Vue.use(Vuex)
-
-export default new Vuex.Store({
-  state: {
+export const useWeatherStore = defineStore("weather", {
+  state: () => ({
     currentDay: {
       cityName: "",
       maxTemp: 0,
@@ -24,36 +21,40 @@ export default new Vuex.Store({
       airPressure: 0,
     },
     app: {
-      unitSelected: '°C',
+      unitSelected: "°C",
       woeidLocation: 0,
       cors: "https://cors-proxy-b.herokuapp.com",
       api: "https://www.metaweather.com/api/location",
     },
-  },
-  mutations: {
-    cToF(state) {
-      state.currentDay.currentTemp = Math.round((state.currentDay.currentTemp * 1.8) + 32)
-      state.currentDay.maxTemp = Math.round((state.currentDay.maxTemp * 1.8) + 32)
-      state.currentDay.minTemp = Math.round((state.currentDay.minTemp * 1.8) + 32)
-
-      state.weatherDays.forEach(item => {
-        item.minTemp = Math.round((item.minTemp * 1.8) + 32)
-        item.maxTemp = Math.round((item.maxTemp * 1.8) + 32)
-      })
-    },
-    fToC(state) {
-      state.currentDay.currentTemp = Math.round((state.currentDay.currentTemp - 32) * (5 / 9))
-      state.currentDay.maxTemp = Math.round((state.currentDay.maxTemp - 32) * (5 / 9))
-      state.currentDay.minTemp = Math.round((state.currentDay.minTemp - 32) * (5 / 9))
-
-      state.weatherDays.forEach(item => {
-        item.minTemp = Math.round((item.minTemp - 32) * (5 / 9))
-        item.maxTemp = Math.round((item.maxTemp - 32) * (5 / 9))
-      })
-    },
-  },
+  }),
   actions: {
+    cToF() {
+      this.currentDay.currentTemp = Math.round(
+        this.currentDay.currentTemp * 1.8 + 32
+      );
+      this.currentDay.maxTemp = Math.round(this.currentDay.maxTemp * 1.8 + 32);
+      this.currentDay.minTemp = Math.round(this.currentDay.minTemp * 1.8 + 32);
+
+      this.weatherDays.forEach((item) => {
+        item.minTemp = Math.round(item.minTemp * 1.8 + 32);
+        item.maxTemp = Math.round(item.maxTemp * 1.8 + 32);
+      });
+    },
+    fToC() {
+      this.currentDay.currentTemp = Math.round(
+        (this.currentDay.currentTemp - 32) * (5 / 9)
+      );
+      this.currentDay.maxTemp = Math.round(
+        (this.currentDay.maxTemp - 32) * (5 / 9)
+      );
+      this.currentDay.minTemp = Math.round(
+        (this.currentDay.minTemp - 32) * (5 / 9)
+      );
+
+      this.weatherDays.forEach((item) => {
+        item.minTemp = Math.round((item.minTemp - 32) * (5 / 9));
+        item.maxTemp = Math.round((item.maxTemp - 32) * (5 / 9));
+      });
+    },
   },
-  modules: {
-  }
-})
+});
