@@ -23,8 +23,8 @@ export const useWeatherStore = defineStore("weather", {
     app: {
       unitSelected: "°C",
       woeidLocation: 0,
-      cors: "https://cors-proxy-b.herokuapp.com",
-      api: "https://www.metaweather.com/api/location",
+      cors: "https://cors-urzk.onrender.com",
+      api: "http://dataservice.accuweather.com",
     },
   }),
   actions: {

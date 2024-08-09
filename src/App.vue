@@ -1,19 +1,15 @@
-<!-- <script setup>
-import { onMounted, onCreated, ref } from 'vue';
-import Basic from "@/components/Basic.vue";
-import Details from "@/components/Details.vue";
-import Search from "@/components/Search.vue";
+<script setup>
+import { onMounted, ref } from "vue";
+import { useWeatherStore } from "@/store/weatherStore.js";
+import { getImageUrl } from "../utils/imageUtils";
 
-// ...mapState(["currentDay", "weatherDays", "dayDetails", "app"]),
-// ...mapMutations(["cToF"]),
-
-onCreated(() => {
-  const city = 116545;
-  fetch(city);
-});
+const weatherStore = useWeatherStore();
+const basic = ref(0);
+const apiKey = import.meta.env.VITE_API_KEY;
 
 onMounted(() => {
-  this.$refs.basic.getLocation();
+  const city = 349727;
+  fetchApi(city);
 });
 
 const hideLoad = () => {
@@ -25,68 +21,66 @@ const showLoad = () => {
   document.querySelector(".load").classList.remove("load--hide");
 };
 
-const getImgUrl = (pic) => {
-  return require(`./assets/${pic.replace(/ /g, "")}.png`);
-};
+// http://dataservice.accuweather.com/locations/v1/cities/autocomplete?apikey=fvRU2yCk4jSZZNNYL07Y3BPKR2kXAH4I&q=new
+//   weatherStore.currentDay.cityName = res.body.title;
 
-const fetch = (city) => {
-  const apiArg = `location/${city}`;
-  const url = `${this.app.cors}/${this.app.api}/${apiArg}`;
-  this.$http
-    .get(url)
+const fetchApi = (city) => {
+  const apiArgCurrent = `currentconditions/v1/${city}?apikey=${apiKey}`;
+  const urlCurrent = `${weatherStore.app.cors}/${weatherStore.app.api}/${apiArgCurrent}`;
+
+  const apiArgForecasts = `forecasts/v1/daily/5day/${city}?apikey=${apiKey}`;
+  const urlForecasts = `${weatherStore.app.cors}/${weatherStore.app.api}/${apiArgForecasts}`;
+  
+  fetch(
+    urlCurrent
+  )
     .then((res) => {
-      this.currentDay.cityName = res.body.title;
-      this.currentDay.maxTemp = res.body.consolidated_weather[0].max_temp;
-      this.currentDay.minTemp = res.body.consolidated_weather[0].min_temp;
-      this.currentDay.currentTemp = Math.round(
-        res.body.consolidated_weather[0].the_temp
-      );
-      this.currentDay.weatherState =
-        res.body.consolidated_weather[0].weather_state_name;
-      this.currentDay.currentDate = this.getDate(
-        res.body.consolidated_weather[0].applicable_date
-      );
-      this.currentDay.imageStatus = this.getImgUrl(
-        this.currentDay.weatherState
-      );
+      res = res.body
 
-      this.$store.state.weatherDays = [];
-      for (let i = 1; i <= 5; i++) {
-        let day = {
-          minTemp: Math.round(res.body.consolidated_weather[i].min_temp),
-          maxTemp: Math.round(res.body.consolidated_weather[i].max_temp),
-          weatherState: res.body.consolidated_weather[i].weather_state_name,
-          day:
-            i == 1
-              ? "Tomorrow"
-              : this.getDate(res.body.consolidated_weather[i].applicable_date),
-          imageStatus: "",
-        };
-
-        (day.imageStatus = this.getImgUrl(day.weatherState)),
-          this.weatherDays.push(day);
-      }
-
-      this.dayDetails.windStatus = Math.round(
-        res.body.consolidated_weather[0].wind_speed
-      );
-      this.dayDetails.windDirection =
-        res.body.consolidated_weather[0].wind_direction_compass;
-      this.dayDetails.humidity = res.body.consolidated_weather[0].humidity;
-      this.dayDetails.visibility =
-        res.body.consolidated_weather[0].visibility.toFixed(1);
-      this.dayDetails.airPressure =
-        res.body.consolidated_weather[0].air_pressure;
-      this.dayDetails.windDirectionDegrees = Math.round(
-        res.body.consolidated_weather[0].wind_direction
-      );
-
-      if (this.app.unitSelected == "°F") {
-        this.cToF();
-      }
-      this.hideLoad();
+      weatherStore.currentDay.currentTemp = res[0].Temperature.Imperial.Value
+      weatherStore.currentDay.weatherState = res[0].WeatherText
+      weatherStore.currentDay.currentDate = getDate(res[0].LocalObservationDateTime.split('T')[0])
+      weatherStore.currentDay.imageStatus = getImageUrl(`icons/${res[0].WeatherIcon}.png`)
+      weatherStore.dayDetails.windStatus = res[0].Wind.Speed.Imperial.Value
+      weatherStore.dayDetails.windDirection = res[0].Wind.Direction.English
+      weatherStore.dayDetails.windDirectionDegrees = Math.round(res[0].Wind.Direction.Degrees)
+      weatherStore.dayDetails.humidity = res[0].IndoorRelativeHumidity
+      weatherStore.dayDetails.visibility = res[0].Visibility.Imperial.Value.toFixed(1);
+      weatherStore.dayDetails.airPressure = res[0].Pressure.Metric.Value
+      hideLoad();
     })
+    .catch((err) => console.log(err));
 
+  fetch(
+    urlForecasts
+  )
+    .then((res) => {
+      res = res.body
+
+      weatherStore.currentDay.maxTemp = res.DailyForecasts[0].Temperature.Maximum.Value;
+      weatherStore.currentDay.minTemp = res.DailyForecasts[0].Temperature.Minimum.Value;
+
+        weatherStore.weatherDays = [];
+        for (let i = 0; i <= 4; i++) {
+          let day = {
+            minTemp: res.DailyForecasts[i].Temperature.Minimum.Value,
+            maxTemp: res.DailyForecasts[i].Temperature.Maximum.Value,
+            weatherState: res.DailyForecasts[i].Day.IconPhrase,
+            day:
+              i == 0
+                ? "Today"
+                : getDate(res.DailyForecasts[i].Date.split('T')[0]),
+            imageStatus: "",
+          };
+
+          day.imageStatus = getImageUrl(`icons/${res.DailyForecasts[i].Day.Icon}.png`)
+          weatherStore.weatherDays.push(day);
+        }
+
+        if (weatherStore.app.unitSelected == "°C") {
+          weatherStore.fToC();
+        }
+    })
     .catch((err) => console.log(err));
 };
 
@@ -113,16 +107,16 @@ const getDate = (dateApi) => {
 
   return `${days[weekday]}, ${dateapi[2]} ${months[month]}`;
 };
-</script> -->
+</script>
 
 <template>
   <div id="app" class="app">
-    <!-- <div class="load">
+    <div class="load">
       <span class="load__text">Loading...</span>
     </div>
-    <Search />
-    <Basic ref="basic" />
-    <Details /> -->
+    <!-- <Search /> -->
+    <!-- <Basic ref="basic" /> -->
+    <!-- <Details /> -->
   </div>
 </template>
 

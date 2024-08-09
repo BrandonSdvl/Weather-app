@@ -44,11 +44,11 @@
         }
 
         @include tablet {
+            margin-left: 12px;
+
             &:hover {
                 background-color: lighten(#585676, 20%);
             }
-
-            margin-left: 12px;
         }
     }
 
