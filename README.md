@@ -37,7 +37,7 @@
 
 ![screenshot](./src/assets/weather-app-b.web.app_.png)
 
-This is a responsive Vue app hosted in [Firebase](https://firebase.google.com/) that provides you with the weather of any city you want to search, it is done using the [MetaWeather](https://www.metaweather.com/api/) API and [Vuex](https://vuex.vuejs.org/) to store the data.
+This is a responsive Vue app hosted in [Firebase](https://firebase.google.com/) that provides you with the weather of any city you want to search, it is done using the [AccuWeather](https://developer.accuweather.com/) API and [Pinia](https://pinia.vuejs.org/) to store the data.
 
 ### Built With
 
@@ -79,14 +79,14 @@ $ git clone https://github.com/BrandonSdvl/Weather-app.git
 $ npm install
 
 # Run server
-$ npm run serve
+$ npm run dev
 ```
 
 ## Acknowledgements
 
 <!-- This section should list any articles or add-ons/plugins that helps you to complete the project. This is optional but it will help you in the future. For example: -->
 
-- [MetaWeather](https://www.metaweather.com/api/)
+- [AccuWeather](https://developer.accuweather.com/)
 - [FontAwesome](https://fontawesome.com/)
 
 ## Contact
