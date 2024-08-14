@@ -1,3 +1,9 @@
+<script setup>
+import { useWeatherStore } from "@/store/weatherStore.js";
+
+const weatherStore = useWeatherStore();
+</script>
+
 <template>
   <section class="highlights-container">
     <h2 class="highlights-container__title">Today's Hightlight</h2>
@@ -5,7 +11,7 @@
       <span class="highlight-card__title">Wind Status</span>
       <div class="highlight-card__description-container">
         <span class="highlight-card__description">{{
-          dayDetails.windStatus
+          weatherStore.dayDetails.windStatus
         }}</span>
         <span class="highlight-card__unit">mph</span>
       </div>
@@ -14,12 +20,12 @@
           class="fas fa-location-arrow highlight-card__icon"
           v-bind:style="{
             transform: `rotate(${
-              this.dayDetails.windDirectionDegrees - 45
+              weatherStore.dayDetails.windDirectionDegrees - 45
             }deg)`,
           }"
         ></i>
         <span class="highlight-card__direction">{{
-          dayDetails.windDirection
+          weatherStore.dayDetails.windDirection
         }}</span>
       </div>
     </article>
@@ -27,7 +33,7 @@
       <span class="highlight-card__title"> Humidity </span>
       <div class="highlight-card__description-container">
         <span class="highlight-card__description">{{
-          dayDetails.humidity
+          weatherStore.dayDetails.humidity
         }}</span>
         <span class="highlight-card__unit">%</span>
       </div>
@@ -40,7 +46,7 @@
         <div class="humidity__bar"></div>
         <div
           class="humidity__percentage-bar"
-          v-bind:style="{ width: dayDetails.humidity + '%' }"
+          v-bind:style="{ width: weatherStore.dayDetails.humidity + '%' }"
         ></div>
         <span class="humidity__unit">%</span>
       </div>
@@ -49,7 +55,7 @@
       <span class="highlight-card__title"> Visibility </span>
       <div class="highlight-card__description-container">
         <span class="highlight-card__description">
-          {{ dayDetails.visibility }}
+          {{ weatherStore.dayDetails.visibility }}
         </span>
         <span class="highlight-card__unit">miles</span>
       </div>
@@ -58,19 +64,10 @@
       <span class="highlight-card__title"> Air Pressure </span>
       <div class="highlight-card__description-container">
         <span class="highlight-card__description">
-          {{ dayDetails.airPressure }}
+          {{ weatherStore.dayDetails.airPressure }}
         </span>
         <span class="highlight-card__unit">mb</span>
       </div>
     </article>
   </section>
 </template>
-<script>
-import { mapState } from "vuex";
-export default {
-  name: "Highlights",
-  computed: {
-    ...mapState(["dayDetails"]),
-  },
-};
-</script>

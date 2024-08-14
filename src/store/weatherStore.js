@@ -20,12 +20,6 @@ export const useWeatherStore = defineStore("weather", {
       visibility: "",
       airPressure: 0,
     },
-    app: {
-      unitSelected: "°C",
-      woeidLocation: 0,
-      cors: "https://cors-urzk.onrender.com",
-      api: "http://dataservice.accuweather.com",
-    },
   }),
   actions: {
     cToF() {
