@@ -7,6 +7,7 @@ import { onMounted, ref, provide } from "vue";
 import { useWeatherStore } from "@/store/weatherStore.js";
 import { getImageUrl } from "../utils/imageUtils";
 import { useAppStore } from "./store/appStore.js";
+import { buildApiUrl } from "@/utils/apiUtils.js";
 
 const weatherStore = useWeatherStore();
 const appStore = useAppStore();
@@ -18,106 +19,89 @@ onMounted(() => {
   fetchApi(city);
 });
 
-const fetchApi = (city) => {
-  const apiArgCurrent = `currentconditions/v1/${city}?apikey=${appStore.apiKey}&details=true`;
-  const urlCurrent = `${appStore.cors}/${appStore.api}/${apiArgCurrent}`;
-
-  const apiArgForecasts = `forecasts/v1/daily/5day/${city}?apikey=${appStore.apiKey}`;
-  const urlForecasts = `${appStore.cors}/${appStore.api}/${apiArgForecasts}`;
-
+const fetchApi = async (city) => {  
   appStore.loading = true;
-  axios
-    .get(urlCurrent)
-    .then((res) => {
-      res = res.data;
-      if (res.code == "ERR_BAD_RESPONSE") {
-        appStore.exceeded = true
-        return
-      }
 
-      weatherStore.currentDay.currentTemp = res[0].Temperature.Imperial.Value;
-      weatherStore.currentDay.weatherState = res[0].WeatherText;
-      weatherStore.currentDay.currentDate = getDate(
-        res[0].LocalObservationDateTime.split("T")[0]
-      );
-      weatherStore.currentDay.imageStatus = getImageUrl(
-        `icons/${res[0].WeatherIcon}.png`
-      );
-      weatherStore.dayDetails.windStatus = res[0].Wind.Speed.Imperial.Value;
-      weatherStore.dayDetails.windDirection = res[0].Wind.Direction.English;
-      weatherStore.dayDetails.windDirectionDegrees = Math.round(
-        res[0].Wind.Direction.Degrees
-      );
-      weatherStore.dayDetails.humidity = res[0].IndoorRelativeHumidity;
-      weatherStore.dayDetails.visibility =
-        res[0].Visibility.Imperial.Value.toFixed(1);
-      weatherStore.dayDetails.airPressure = res[0].Pressure.Metric.Value;
-    })
-    .catch((err) => console.log(err));
+  try {
+    const [currentWeather, forecast] = await Promise.all([
+      fetchWeatherData(city),
+      fetchForecastData(city),
+    ]);
 
-  axios
-    .get(urlForecasts)
-    .then((res) => {
-      res = res.data;
-      if (res.code == "ERR_BAD_RESPONSE") {
-        appStore.exceeded = true
-        return
-      }
+    if (currentWeather.code === "ERR_BAD_RESPONSE" || forecast.code === "ERR_BAD_RESPONSE") {
+      appStore.exceeded = true;
+      return;
+    }
 
-      weatherStore.currentDay.maxTemp =
-        res.DailyForecasts[0].Temperature.Maximum.Value;
-      weatherStore.currentDay.minTemp =
-        res.DailyForecasts[0].Temperature.Minimum.Value;
+    updateCurrentWeather(currentWeather[0]);
+    updateForecast(forecast);
 
-      weatherStore.weatherDays = [];
-      for (let i = 0; i <= 4; i++) {
-        let day = {
-          minTemp: res.DailyForecasts[i].Temperature.Minimum.Value,
-          maxTemp: res.DailyForecasts[i].Temperature.Maximum.Value,
-          weatherState: res.DailyForecasts[i].Day.IconPhrase,
-          day:
-            i == 0
-              ? "Today"
-              : getDate(res.DailyForecasts[i].Date.split("T")[0]),
-          imageStatus: "",
-        };
+    if (appStore.unitSelected === "°C") {
+      weatherStore.fToC();
+    }
+  } catch (error) {
+    console.log(error);
+  } finally {
+    appStore.loading = false;
+  }
+};
 
-        day.imageStatus = getImageUrl(
-          `icons/${res.DailyForecasts[i].Day.Icon}.png`
-        );
-        weatherStore.weatherDays.push(day);
-      }
+const fetchWeatherData = async (city) => {
+  const urlCurrent = buildApiUrl(`currentconditions/v1/${city}?details=true`);
+  const { data } = await axios.get(urlCurrent);
+  return data;
+};
 
-      if (appStore.unitSelected == "°C") {
-        weatherStore.fToC();
-      }
-      appStore.loading = false;
-    })
-    .catch((err) => console.log(err));
+const fetchForecastData = async (city) => {
+  const urlForecasts = buildApiUrl(`forecasts/v1/daily/5day/${city}`);
+  const { data } = await axios.get(urlForecasts);
+  return data;
+};
+
+const updateCurrentWeather = (data) => {
+  if (!data) return;
+  weatherStore.currentDay.currentTemp = data.Temperature.Imperial.Value;
+  weatherStore.currentDay.weatherState = data.WeatherText;
+  weatherStore.currentDay.currentDate = getDate(
+    data.LocalObservationDateTime.split("T")[0]
+  );
+  weatherStore.currentDay.imageStatus = getImageUrl(
+    `icons/${data.WeatherIcon}.png`
+  );
+  weatherStore.dayDetails = {
+    windStatus: data.Wind.Speed.Imperial.Value,
+    windDirection: data.Wind.Direction.English,
+    windDirectionDegrees: Math.round(data.Wind.Direction.Degrees),
+    humidity: data.IndoorRelativeHumidity,
+    visibility: data.Visibility.Imperial.Value.toFixed(1),
+    airPressure: data.Pressure.Metric.Value,
+  };
+};
+
+const updateForecast = (data) => {
+  weatherStore.currentDay.maxTemp = data.DailyForecasts[0].Temperature.Maximum.Value;
+  weatherStore.currentDay.minTemp = data.DailyForecasts[0].Temperature.Minimum.Value;
+
+  weatherStore.weatherDays = [];
+  weatherStore.weatherDays = data.DailyForecasts.map((day, index) => ({
+    minTemp: day.Temperature.Minimum.Value,
+    maxTemp: day.Temperature.Maximum.Value,
+    weatherState: day.Day.IconPhrase,
+    day: index === 0 ? "Today" : getDate(day.Date.split("T")[0]),
+    imageStatus: getImageUrl(`icons/${day.Day.Icon}.png`),
+  }));
 };
 
 const getDate = (dateApi) => {
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
+    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+    "Jul", "Aug", "Sep", "Oct","Nov", "Dec",
   ];
-  const dateapi = dateApi.split("-");
-  let date = new Date(`${dateapi[1]} ${dateapi[2]}, ${dateapi[0]} 12:00:00`);
-  let weekday = date.getDay();
-  let month = date.getMonth();
 
-  return `${days[weekday]}, ${dateapi[2]} ${months[month]}`;
+  const [year, month, day] = dateApi.split("-");
+  const date = new Date(`${month} ${day}, ${year} 12:00:00`);
+  return `${days[date.getDay()]}, ${day} ${months[date.getMonth()]}`;
 };
 
 provide("fetchApi", fetchApi);

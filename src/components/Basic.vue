@@ -2,6 +2,8 @@
 import { useWeatherStore } from "@/store/weatherStore.js";
 import { useAppStore } from "@/store/appStore.js";
 import { inject } from "vue";
+import { buildApiUrl } from "@/utils/apiUtils.js";
+import axios from "axios";
 
 const appStore = useAppStore();
 const weatherStore = useWeatherStore();
@@ -14,33 +16,27 @@ const show = () => {
 const getLocation = () => {
   const geoLocation = navigator.geolocation;
 
-  const options = {
-    enableHighAccuracy: true,
-    timeout: 5000,
-    maximumAge: 0,
-  };
-
-  const error = (error) => console.log(error);
-
-  geoLocation.getCurrentPosition(fetchLocation, error, options);
+  geoLocation.getCurrentPosition(
+    (position) => fetchLocation(position.coords),
+    (error) => console.log(error),
+    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+  );
 };
 
-const fetchLocation = (position) => {
-  appStore.loading = true;
+const fetchLocation = async ({ latitude, longitude }) => {
+  try {
+    appStore.loading = true;
+    const url = buildApiUrl(`locations/v1/cities/geoposition/search?q=${latitude}%2C${longitude}`);
+    const { data } = await axios.get(url);
 
-  const apiArg = `locations/v1/cities/geoposition/search?apikey=${appStore.apiKey}&q=${position.coords.latitude}%2C${position.coords.longitude}`;
-  const url = `${appStore.cors}/${appStore.api}/${apiArg}`;
-  axios
-    .get(url)
-    .then((res) => {
-      res = res.data;
-
-      appStore.key = res.Key;
-      weatherStore.currentDay.cityName = res.LocalizedName;
-      fetchApi(appStore.key);
-      appStore.loading = false;
-    })
-    .catch((err) => console.log(err));
+    appStore.key = data.Key;
+    weatherStore.currentDay.cityName = data.LocalizedName;
+    fetchApi(appStore.key);
+  } catch (err) {
+    console.log(err);
+  } finally {
+    appStore.loading = false;
+  }
 };
 </script>
 
@@ -49,14 +45,14 @@ const fetchLocation = (position) => {
     <div class="basic__button-container">
       <button
         class="basic__search-place button"
-        v-on:click="show()"
+        @click="show"
         aria-label="Search"
       >
         Search for places
       </button>
       <button
         class="basic__get-location button"
-        v-on:click="getLocation()"
+        @click="getLocation"
         aria-label="GetLocation"
         title="Location"
       ></button>
@@ -69,23 +65,21 @@ const fetchLocation = (position) => {
       />
     </div>
     <h1 class="basic__degrees">
-      <span v-text="weatherStore.currentDay.currentTemp"></span>
-      <span class="basic__unit" v-text="appStore.unitSelected"></span>
+      <span>{{ weatherStore.currentDay.currentTemp }}</span>
+      <span class="basic__unit">{{ appStore.unitSelected }}</span>
     </h1>
-    <h2
-      class="basic__weather-status"
-      v-text="weatherStore.currentDay.weatherState"
-    ></h2>
+    <h2 class="basic__weather-status">
+      {{ weatherStore.currentDay.weatherState }}
+    </h2>
     <div class="basic__date">
-      Today<span class="separator">•</span
-      ><span v-text="weatherStore.currentDay.currentDate"></span>
+      Today<span class="separator">•</span>
+      <span>{{ weatherStore.currentDay.currentDate }}</span>
     </div>
     <div class="basic__location-content">
       <i class="fas fa-map-marker-alt location-logo"></i>
-      <span
-        class="basic__location-city"
-        v-text="weatherStore.currentDay.cityName"
-      ></span>
+      <span class="basic__location-city">
+        {{ weatherStore.currentDay.cityName }}
+      </span>
     </div>
   </div>
 </template>
