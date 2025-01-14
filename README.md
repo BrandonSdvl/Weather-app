@@ -37,7 +37,8 @@
 
 ![screenshot](./src/assets/weather-app-b.web.app_.png)
 
-This is a responsive Vue app hosted in [Firebase](https://firebase.google.com/) that provides you with the weather of any city you want to search, it is done using the [AccuWeather](https://developer.accuweather.com/) API and [Pinia](https://pinia.vuejs.org/) to store the data.
+
+This is a responsive Vue application hosted on [Firebase](https://firebase.google.com/) that provides real-time weather information for the current city or any other city the user wants to check. It uses the AccuWeather API to fetch weather data and employs Pinia as a state management solution to store and manage the information efficiently.
 
 ### Built With
 
